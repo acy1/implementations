@@ -1,16 +1,11 @@
 #include "mergesort.h"
 
-
-inline static void copy(uint8_t *src, uint8_t *dst, size_t size);
-inline static void merge(uint8_t *arr1, size_t len1, uint8_t *arr2, size_t len2, 
-      size_t size, uint8_t *dst, int (*comp)(uint8_t *a, uint8_t *b));
-
 /* 
-  Copy SIZE number of bytes from SRC to DST
-  SRC - pointer to first byte to be copied. 
-      
-  dst: pointer to first destination byte.
-
+ * Copy SIZE number of bytes from SRC to DST
+ *
+ * SRC - pointer to first byte to be copied     
+ * DST - pointer to first destination byte
+ * SIZE - number of bytes to copy
  */  
 inline static void 
 copy(uint8_t *src, uint8_t *dst, size_t size)
@@ -19,13 +14,21 @@ copy(uint8_t *src, uint8_t *dst, size_t size)
     *dst++ = *src++;
   }
 }
-
+/*
+ * Merge two sorted arrays sorted into 
+ *
+ *
+ *
+ *
+ *
+ *    
+ */
 inline static void
-merge(uint8_t *arr1, size_t len1, uint8_t *arr2, size_t len2, 
-      size_t size, uint8_t *dst, int (*comp)(uint8_t *a, uint8_t *b))
+merge(void *arr1, size_t len1, void *arr2, size_t len2, 
+      size_t size, void *dst, int (*compar)(const void*a, const void*b))
 {
   while(len1 && len2) {
-    if(comp(arr1, arr2) <= 0) {
+    if(compar(arr1, arr2) <= 0) {
       copy(arr1, dst, size);
       arr1 += size;
       dst += size;
@@ -51,21 +54,25 @@ merge(uint8_t *arr1, size_t len1, uint8_t *arr2, size_t len2,
   }
 }
 
-void 
-msort(void *arr, size_t n, size_t size, int (*comp)(uint8_t*a, uint8_t*b)) 
+int
+msort(void *base, size_t num, size_t size, int (*compar)(const void*a, const void*b))
 {
-  uint8_t *cur, *work, *workarray;
+  void *cur, *work, *workarray;
   size_t m, len1, len2, counter, sub_array_size;
 
-  workarray = malloc(size*n);
+  workarray = malloc(size*num);
+  if(!workarray) {
+    return MERGE_ERR_NO_MEM;
+  }
+
   sub_array_size = 1;
   counter = 0;
 
-  while(sub_array_size < n)
+  while(sub_array_size < num)
   {
-    m = n;
-    cur = counter ? workarray : arr;
-    work = counter ? arr : workarray;
+    m = num;
+    cur = counter ? workarray : base;
+    work = counter ? base : workarray;
 
     while(m)
     {
@@ -73,7 +80,7 @@ msort(void *arr, size_t n, size_t size, int (*comp)(uint8_t*a, uint8_t*b))
       m -= len1;
       len2 = (m < sub_array_size) ? m : sub_array_size;
       m -= len2;
-      merge(cur, len1, cur + (size * len1), len2, size, work, comp);
+      merge(cur, len1, cur + (size * len1), len2, size, work, compar);
       cur += (size * (len1 + len2));
       work += (size * (len1 + len2));
     }
@@ -82,8 +89,8 @@ msort(void *arr, size_t n, size_t size, int (*comp)(uint8_t*a, uint8_t*b))
   }
 
   if(counter) {
-    copy(workarray, arr, size*n);
+    copy(workarray, base, size*num);
   }
-
   free(workarray);
+  return MERGE_COMPLETE;
 }

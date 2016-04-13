@@ -1,4 +1,4 @@
-#include "mergesort.h"
+#include "../complete/mergesort.h"
 #include <time.h>
 
 #define TESTLENBOUND 600000
@@ -6,7 +6,7 @@
 #define TESTNUM 100
 #define CONSTANT 7
 
-int intcomp(uint8_t *a_, uint8_t *b_)
+int intcomp(const void *a_, const void *b_)
 {
   int *a = (int*) a_;
   int *b = (int*) b_;
