@@ -70,6 +70,16 @@ merge(void *arr1, size_t len1, void *arr2, size_t len2,
 }
 
 /* 
+ * INPUTS:
+ * BASE - array to be sorted
+ * NUM  - number of items to be sorted
+ * SIZE - size of each item in BASE, in bytes
+ * COMP - comparison function that defines a linear ordering on the items in BASE
+ * 
+ * RETURN VALUES:
+ * MERGE_ERR_NO_MEM if memory allocation fails, else MERGE_COMPLETE.
+ *
+ * INFORMATION: 
  * A bottom-up implementation of mergesort using O(num) additional space.
  * An array BASE of NUM items each of SIZE many bytes is sorted
  * with respect to the COMP function.
@@ -78,15 +88,6 @@ merge(void *arr1, size_t len1, void *arr2, size_t len2,
  * 0 if A and B are equal with respect to the ordering, or 1 if B should
  * come before A.
  * 
- * RETURN VALUES:
- * MERGE_ERR_NO_MEM if memory allocation fails, else MERGE_COMPLETE.
- * 
- * INPUTS:
- * BASE - array to be sorted
- * NUM  - number of items to be sorted
- * SIZE - size of each item in BASE, in bytes
- * COMP - comparison function that defines a linear ordering on the items in BASE
- *
  * USAGE EXAMPLE:
  * int len = 20;
  * int *b = malloc(sizeof(int)*len);
