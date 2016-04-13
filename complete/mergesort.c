@@ -1,6 +1,7 @@
 #include "mergesort.h"
 
 /* 
+ * DESRCIPTION: 
  * Copy SIZE number of bytes from SRC to DST
  * SRC and DST must have at least SIZE bytes, else
  * this function will have undefined behavior. 
@@ -18,6 +19,7 @@ copy(uint8_t *src, uint8_t *dst, size_t size)
 }
 
 /*
+ * DESCRIPTION: 
  * Merge two sorted arrays sorted into DST array.
  * ARR1 and ARR2 have LEN1 and LEN2 items respectively,
  * Each item is SIZE many bytes. 
@@ -33,7 +35,8 @@ copy(uint8_t *src, uint8_t *dst, size_t size)
  * LEN2 - number of items in ARR2
  * SIZE - size of each item in bytes
  * DST  - array which receives merged values
- * COMP - comparison function providing ordering on items
+ * COMP - comparison function providing ordering on items,
+ *        see msort description for details
  */
 inline static void
 merge(void *arr1, size_t len1, void *arr2, size_t len2, 
@@ -66,7 +69,42 @@ merge(void *arr1, size_t len1, void *arr2, size_t len2,
   }
 }
 
-
+/* 
+ * A bottom-up implementation of mergesort using O(num) additional space.
+ * An array BASE of NUM items each of SIZE many bytes is sorted
+ * with respect to the COMP function.
+ * BASE must have at least NUM*SIZE bytes else behavior is undefined.
+ * COMP returns -1 if the element pointed to by A should come before B,
+ * 0 if A and B are equal with respect to the ordering, or 1 if B should
+ * come before A.
+ * 
+ * RETURN VALUES:
+ * MERGE_ERR_NO_MEM if memory allocation fails, else MERGE_COMPLETE.
+ * 
+ * INPUTS:
+ * BASE - array to be sorted
+ * NUM  - number of items to be sorted
+ * SIZE - size of each item in BASE, in bytes
+ * COMP - comparison function that defines a linear ordering on the items in BASE
+ *
+ * USAGE EXAMPLE:
+ * int len = 20;
+ * int *b = malloc(sizeof(int)*len);
+ * // populate b 
+ * msort(b, len, sizeof(int), intcomp);
+ *
+ * where intcomp may look like:
+ * 
+ * int intcomp(const void *a, const void *b)
+ * { return (*((int*)a) <= *((int*)b)) ? -1 : 1; }
+ * 
+ * NOTES:
+ *
+ * This specific implementation merges subarrays of exponentially increasing size
+ * into a work array. The role of the input array and work array are flipped each
+ * iteration of the primary while loop. This means that the work array must be copied into
+ * the input array prior to being freed if the number of iterations is odd.
+ */
 int
 msort(void *base, size_t num, size_t size, int (*comp)(const void*a, const void*b))
 {

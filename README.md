@@ -9,5 +9,4 @@ Ultimately, I have the following goals for this repository:
 * Have a rigorous test suite for each implementation.
 * Learn a lot.
 
-
-As things currently stand, many of the implemenations in the "inprogress" folder are morally correct; however, they are lacking comments and a test suite. I hope to move these to the "complete" folder after adding comments, cleaning up the code, and adding appropriate tests.
+As things currently stand, many of the implemenations in the "inprogress" folder are morally correct; however, they are lacking comments and a test suite. I hope to move these to the "complete" folder after adding comments, cleaning up the code, and adding appropriate tests. Since I was initially trying to get through as many of these as possible (notably before making this repo), I suspect that the cleaning up phase may be more work than the original coding phase.

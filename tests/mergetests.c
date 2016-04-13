@@ -6,17 +6,9 @@
 #define TESTNUM 100
 #define CONSTANT 7
 
-int intcomp(const void *a_, const void *b_)
+int intcomp(const void *a, const void *b)
 {
-  int *a = (int*) a_;
-  int *b = (int*) b_;
-  if(*a < *b) {
-    return -1;
-  } else if(*a > *b) {
-    return 1;
-  } else {
-    return 0;
-  }
+  return ( *(int*)a <= *(int*)b ? -1 : 1);
 }
 
 int test_and_verify_permutations(int num, unsigned len)
@@ -33,7 +25,7 @@ int test_and_verify_permutations(int num, unsigned len)
     precount[a[i]]++;
   }
 
-  msort((void*) a, len, sizeof(unsigned), intcomp);
+  msort(a, len, sizeof(unsigned), intcomp);
 
   unsigned *postcount = calloc(2*len, sizeof(unsigned));
 
